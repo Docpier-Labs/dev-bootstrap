@@ -1,6 +1,7 @@
 # CLI Tools
 brew "kubectl"
 brew "nvm"
+brew "git"
 brew "gh"
 
 # GUI Applications (Casks)
