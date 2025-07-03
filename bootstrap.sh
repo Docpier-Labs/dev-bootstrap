@@ -74,6 +74,13 @@ git clone git@github.com:Docpier-Labs/dev-bootstrap.git
 
 cd dev-bootstrap
 
+if [ -f Brewfile ]; then
+  echo "Installing GUI apps from Brewfile..."
+  brew bundle --file=Brewfile
+else
+  echo "Brewfile not found, skipping GUI apps installation."
+fi
+
 # --- Devbox install ---
 if ! command -v devbox >/dev/null 2>&1; then
   echo "Installing Devbox via official script..."
@@ -96,6 +103,12 @@ if [ ! -f devbox.json ]; then
   exit 1
 fi
 
+# ─── Ensure GitHub CLI Auth Exists ────────────────────────────────────────
+if ! gh auth status &>/dev/null; then
+  echo "🔑 GitHub CLI not authenticated. Running 'gh auth login'..."
+  gh auth login
+fi
+
 # --- Install ghorg and sync repos ---
 if ! command -v ghorg >/dev/null 2>&1; then
   echo "Installing ghorg..."
@@ -112,7 +125,7 @@ export GHORG_BRANCH=main
 export GHORG_OVERWRITE=false
 
 echo "Initial ghorg clone of $GHORG_ORG..."
-ghorg clone $GHORG_ORG
+ghorg clone $GHORG_ORG --output-dir "$GHORG_OUTPUT_DIR"
 
 echo "Launching Devbox shell..."
 devbox shell
