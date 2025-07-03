@@ -96,11 +96,26 @@ while IFS=$'\t' read -r name sshUrl; do
   fi
 done
 
-echo "📐 Installing language runtimes with asdf..."
-asdf plugin add java || true
-asdf plugin add nodejs || true
-asdf plugin add python || true
-asdf install
+# --- Setup asdf and install tool versions ---
+if [ -f .tool-versions ]; then
+  echo "📐 Installing language runtimes with asdf..."
+
+  asdf plugin add java || true
+  asdf plugin add nodejs || true
+  asdf plugin add python || true
+
+  asdf install
+  asdf reshim
+
+  # Set global versions from .tool-versions
+  while read -r tool version; do
+    asdf global "$tool" "$version"
+  done < .tool-versions
+
+  echo "✅ asdf versions installed and set"
+else
+  echo "⚠ .tool-versions file not found. Skipping asdf installs."
+fi
 
 # --- Setup dp CLI ---
 if [ -f ./dp/index.ts ]; then
