@@ -105,27 +105,23 @@ fi
 
 # ─── Ensure GitHub CLI Auth Exists ────────────────────────────────────────
 if ! gh auth status &>/dev/null; then
-  echo "🔑 GitHub CLI not authenticated. Running 'gh auth login'..."
+  echo "GitHub CLI not authenticated. Running 'gh auth login'..."
   gh auth login
 fi
 
-# --- Install ghorg and sync repos ---
-if ! command -v ghorg >/dev/null 2>&1; then
-  echo "Installing ghorg..."
-  brew install ghorg
-fi
+# ─── Sync All Repos via gh ───────────────────────────────────────────────
+echo "Syncing all repos from Docpier-Labs (SSH)..."
 
-# Set environment
-export GHORG_ORG=Docpier-Labs
-export GHORG_CLONE_TYPE=org
-export GHORG_SSH=true
-export GHORG_OUTPUT_DIR=~/Engineering/repos
-export GHORG_SKIP_ARCHIVED=true
-export GHORG_BRANCH=main
-export GHORG_OVERWRITE=false
-
-echo "Initial ghorg clone of $GHORG_ORG..."
-ghorg clone $GHORG_ORG --output-dir "$GHORG_OUTPUT_DIR"
+gh repo list Docpier-Labs --limit 1000 --json name,sshUrl --jq '.[] | [.name, .sshUrl] | @tsv' |
+while IFS=$'\t' read -r name sshUrl; do
+  if [ -d "$HOME/Engineering/repos/$name" ]; then
+    echo "$name exists. Pulling latest changes..."
+    git -C "$HOME/Engineering/repos/$name" pull
+  else
+    echo "Cloning $name..."
+    git clone "$sshUrl" "$HOME/Engineering/repos/$name"
+  fi
+done
 
 echo "Launching Devbox shell..."
 devbox shell
