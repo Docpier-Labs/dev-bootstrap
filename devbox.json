@@ -1,7 +1,6 @@
 {
   "packages": [
     "pyenv",
-    "docker",
     "git",
     "k6",
     "kubernetes-cli",
