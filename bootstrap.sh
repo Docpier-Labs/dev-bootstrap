@@ -34,22 +34,18 @@ else
   git config --global user.email "$github_email"
 fi
 
-# --- SSH Key setup ---
+# --- SSH Key Setup (only if missing) ---
 SSH_KEY="$HOME/.ssh/id_ed25519"
 if [ ! -f "$SSH_KEY" ]; then
-  echo "Creating new SSH key..."
-  ssh-keygen -t ed25519 -C "$github_email" -f "$SSH_KEY" -N ""
+  echo "🔐 Creating new SSH key..."
+  ssh-keygen -t ed25519 -C "$USER@$(hostname)" -f "$SSH_KEY" -N ""
   eval "$(ssh-agent -s)"
   ssh-add "$SSH_KEY"
 
-  echo "Copy this public key to your GitHub SSH settings:"
-  echo "----------------------------------------------------"
-  cat "${SSH_KEY}.pub"
-  echo "----------------------------------------------------"
-  echo "https://github.com/settings/keys"
-  read -p "Press Enter after adding your key to GitHub..."
+  echo "🔗 Uploading public key to GitHub..."
+  gh ssh-key add "${SSH_KEY}.pub" --title "$(hostname)-bootstrap"
 else
-  echo "SSH key already exists: $SSH_KEY"
+  echo "🔐 SSH key already exists: $SSH_KEY"
   eval "$(ssh-agent -s)"
   ssh-add "$SSH_KEY"
 fi
