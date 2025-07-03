@@ -97,6 +97,9 @@ while IFS=$'\t' read -r name sshUrl; do
 done
 
 echo "📐 Installing language runtimes with asdf..."
+asdf plugin add java https://github.com/halcyon/asdf-java.git || true
+asdf plugin add nodejs || true
+asdf plugin add python || true
 asdf install
 
 # --- Setup dp CLI ---
