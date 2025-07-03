@@ -1,5 +1,5 @@
 
-# 🛠️ Docpier Engineering Dev Bootstrap
+# Docpier Engineering Dev Bootstrap
 
 This repository bootstraps and maintains the local development environment for **Docpier engineers** on macOS and Linux. It ensures:
 
@@ -11,7 +11,7 @@ This repository bootstraps and maintains the local development environment for *
 
 ---
 
-## 📁 Folder Structure
+## Folder Structure
 
 ```
 ~/Engineering/
@@ -22,23 +22,22 @@ This repository bootstraps and maintains the local development environment for *
 
 ---
 
-## 🔧 Tooling Overview
+## Tooling Overview
 
 | Tool        | Purpose                                           |
 |-------------|---------------------------------------------------|
 | **Devbox**  | Reproducible dev environment (install tools/packages)
-| **ghorg**   | Clone/pull all private GitHub repos under the org
+| **gh**   | Clone/pull all private GitHub repos under the org
 | **dp**      | Custom CLI with shortcuts for daily workflows
-| **Devcontainer** | (Optional) VSCode support for remote/local setup
+| **Devcontainer** | VSCode support for remote/local setup
 
 ---
 
-## 🧪 Devbox
+## Devbox
 
 **Devbox** installs and manages dev tools like:
 
-- `docker`, `node`, `python`, `jq`, `k6`, `kubectl`, `helm`, `zsh`, etc.
-- Works similarly to `nix`, but easier for onboarding
+- `node`, `python`, `jq`, `k6`, `kubectl`, `helm`, `zsh`, etc.
 
 To start using it:
 ```bash
@@ -53,7 +52,7 @@ devbox shell
 
 ---
 
-## 🚀 Bootstrap From Scratch
+## Bootstrap From Scratch
 
 To set up your full environment:
 ```bash
@@ -70,7 +69,7 @@ This script will:
 
 ---
 
-## 🔄 Daily Updates
+## Daily Updates
 
 ```bash
 devbox task update     # Pull updates from bootstrap repo
@@ -79,7 +78,7 @@ dp sync                # Pull latest repos via ghorg
 
 ---
 
-## 🧠 dp CLI
+## dp CLI
 
 ```bash
 dp sync             # Sync repos via ghorg
@@ -93,7 +92,7 @@ dp docker push svc  # Build and push Docker image to ACR
 
 ---
 
-## 🧪 Local Kubernetes
+## Local Kubernetes
 
 We support running **your full stack locally** with:
 - `kind` cluster (Kubernetes in Docker)
@@ -106,7 +105,7 @@ devbox task setup-local-k8s
 
 ---
 
-## 🔐 GitHub SSH Setup
+## GitHub SSH Setup
 
 - SSH key created if none exists
 - You’ll be prompted to upload your key manually to GitHub
@@ -114,7 +113,7 @@ devbox task setup-local-k8s
 
 ---
 
-## ❓ FAQ
+## FAQ
 
 ### Do I need to run `devbox shell` every time?
 
@@ -130,7 +129,7 @@ All synced under `~/Engineering/repos`.
 
 ---
 
-## 📎 Reference
+## Reference
 
 - Devbox: https://www.jetpack.io/devbox
 - ghorg: https://github.com/gabrie30/ghorg
