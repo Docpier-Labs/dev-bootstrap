@@ -1,0 +1,33 @@
+{
+  "packages": [
+    "docker",
+    "git",
+    "helm",
+    "k6",
+    "kubernetes-cli",
+    "kubelogin",
+    "azure-cli",
+    "azcopy",
+    "jq",
+    "zsh",
+    "tmux",
+    "htop",
+    "tree-sitter",
+    "nvm",
+    "nodejs",
+    "openjdk",
+    "python3",
+    "imagemagick",
+    "vips",
+    "ffmpeg",
+    "coreutils",
+    "findutils",
+    "zbar",
+    "ripgrep",
+    "fzf",
+    "httpie"
+  ],
+  "tasks": {
+    "update": "./repos/dev-bootstrap/bootstrap/update.sh"
+  }
+}
