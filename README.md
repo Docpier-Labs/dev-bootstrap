@@ -1,137 +1,147 @@
+# 🧰 Docpier Engineering Bootstrap
 
-# Docpier Engineering Dev Bootstrap
-
-This repository bootstraps and maintains the local development environment for **Docpier engineers** on macOS and Linux. It ensures:
-
-- A unified workspace under `~/Engineering`
-- Dev tools managed via [Devbox](https://www.jetpack.io/devbox/)
-- SSH-authenticated GitHub access
-- All GitHub organization repos are cloned via `ghorg`
-- A custom `dp` CLI to simplify daily developer tasks
+This repo bootstraps and manages your full local development setup for **Docpier engineers** on **macOS** and **Linux**. It ensures a clean, consistent, and automated developer environment.
 
 ---
 
-## Folder Structure
+## ✅ What It Does
+
+- Creates standard `~/Engineering` workspace  
+- Installs required CLI tools using Homebrew  
+- Manages language versions using [`asdf`](https://asdf-vm.com/)  
+- Authenticates with GitHub via SSH and `gh` CLI  
+- Clones all repos from the `Docpier-Labs` GitHub org  
+- Sets up the custom `dp` CLI  
+
+---
+
+## 📁 Folder Structure
 
 ```
 ~/Engineering/
-├── repos/               # All GitHub repos (auto-synced from Docpier-Labs org)
-│   └── dev-bootstrap/   # This repo is cloned here
-├── playgrounds/         # Experiments and temporary work
+├── repos/               # All GitHub repos (auto-synced)
+│   └── dev-bootstrap/   # This repository lives here
+├── playgrounds/         # For experiments and temp work
 ```
 
 ---
 
-## Tooling Overview
+## 🧱 Tooling Stack
 
-| Tool        | Purpose                                           |
-|-------------|---------------------------------------------------|
-| **Devbox**  | Reproducible dev environment (install tools/packages)
-| **gh**   | Clone/pull all private GitHub repos under the org
-| **dp**      | Custom CLI with shortcuts for daily workflows
-| **Devcontainer** | VSCode support for remote/local setup
-
----
-
-## Devbox
-
-**Devbox** installs and manages dev tools like:
-
-- `node`, `python`, `jq`, `k6`, `kubectl`, `helm`, `zsh`, etc.
-
-To start using it:
-```bash
-cd ~/Engineering/repos/dev-bootstrap
-devbox shell
-```
-
-### Automatically loaded tools:
-- Shell autocomplete, syntax highlighting (via zsh plugins)
-- `nvm` for Node, `pyenv` for Python, `sdkman` for Java
-- All CLI tools defined in `devbox.json`
+| Tool      | Use Case                                      |
+|-----------|-----------------------------------------------|
+| **Homebrew** | Installs system packages & GUI apps         |
+| **asdf**   | Manages language runtimes (Node, Java, Python) |
+| **gh**     | GitHub CLI for repo sync and key mgmt        |
+| **dp**     | Custom CLI helper for daily dev workflows     |
 
 ---
 
-## Bootstrap From Scratch
+## 🚀 Bootstrap Setup
 
-To set up your full environment:
+Run this one-liner to set up your machine:
+
 ```bash
 bash <(curl -sL https://raw.githubusercontent.com/Docpier-Labs/dev-bootstrap/main/bootstrap.sh)
 ```
 
-This script will:
-- Install Git & Devbox
-- Generate SSH key if needed
-- Clone `dev-bootstrap` repo
-- Set up SSH-based GitHub access
-- Sync all repos from `Docpier-Labs` via `ghorg`
-- Launch `devbox shell`
+What it does:
+- Installs Homebrew, Git, `gh`, `asdf`
+- Generates SSH key and adds it to GitHub
+- Clones `dev-bootstrap` repo into `~/Engineering/repos`
+- Installs GUI apps from `Brewfile`
+- Installs runtimes via `.tool-versions` with `asdf`
+- Sets up and links the `dp` CLI globally
+- Clones all GitHub repos from `Docpier-Labs`
 
 ---
 
-## Daily Updates
+## 🔁 Daily Usage
+
+| Task                     | Command                      |
+|--------------------------|------------------------------|
+| Sync repos               | `dp sync`                    |
+| Update bootstrap setup   | `git pull` inside `dev-bootstrap` |
+| Open any repo            | `cd ~/Engineering/repos/<repo>` |
+| Run commands             | Use the `dp` CLI (see below) |
+
+---
+
+## 🧪 dp CLI
+
+A developer helper tool. Commands include:
 
 ```bash
-devbox task update     # Pull updates from bootstrap repo
-dp sync                # Pull latest repos via ghorg
+dp sync                # Pull/update all org repos
+dp ctx                 # Switch Kubernetes context
+dp logs <svc>          # Tail logs from a K8s service
+dp deploy dev          # Deploy app to local env
+dp restart <svc>       # Restart K8s deployment
+dp docker push <svc>   # Build + push Docker image
+dp port-forward <svc>  # Port-forward from K8s to localhost
+```
+
+To add new commands:  
+Create a file in `dp/src/commands/*.ts`.
+
+---
+
+## 🛠 Language Versions
+
+We use [`asdf`](https://asdf-vm.com/) to ensure all devs use consistent versions.
+
+### Sample `.tool-versions`:
+
+```
+java temurin-21.0.1+12
+nodejs 22.2.0
+python 3.11.9
+```
+
+To install and activate versions:
+
+```bash
+asdf install
+asdf global nodejs 22.2.0
 ```
 
 ---
 
-## dp CLI
+## 🧩 GUI Tools
 
-```bash
-dp sync             # Sync repos via ghorg
-dp ctx              # Switch kube context
-dp deploy dev       # Deploy to local env
-dp logs service     # Tail logs from service
-dp restart service  # Restart a K8s deployment
-dp port-forward svc # Port-forward from local
-dp docker push svc  # Build and push Docker image to ACR
-```
+Installed via Homebrew `Brewfile`:
 
----
-
-## Local Kubernetes
-
-We support running **your full stack locally** with:
-- `kind` cluster (Kubernetes in Docker)
-- `kustomize` manifests
-- ACR images loaded directly into kind
-
-```bash
-devbox task setup-local-k8s
-```
+- **Editors**: VS Code, IntelliJ, Cursor  
+- **Docker Tools**: Docker Desktop, Testcontainers Desktop  
+- **Kubernetes**: Lens  
+- **Productivity**: Raycast, Notion, Linear  
+- **Utilities**: DevToys, Boop, Go2Shell, Apidog  
+- **Communication**: Slack, WhatsApp  
+- **Browsers**: Chrome, Firefox  
 
 ---
 
-## GitHub SSH Setup
+## 🔐 GitHub SSH Setup
 
-- SSH key created if none exists
-- You’ll be prompted to upload your key manually to GitHub
-- Ensures `ghorg` and `git` access works securely
-
----
-
-## FAQ
-
-### Do I need to run `devbox shell` every time?
-
-Yes, unless you use [`direnv`](https://direnv.net/) to auto-load it. Recommended.
-
-### What if I want a new CLI command?
-
-Add a new script in `dp/src/commands/*.ts` — it will be auto-loaded.
-
-### Where can I find my repos?
-
-All synced under `~/Engineering/repos`.
+- SSH key is auto-generated if missing  
+- Automatically uploaded to GitHub via `gh`  
+- Git is configured to use SSH instead of HTTPS  
 
 ---
 
-## Reference
+## 💡 Tips
 
-- Devbox: https://www.jetpack.io/devbox
-- ghorg: https://github.com/gabrie30/ghorg
-- direnv: https://direnv.net
-- SSH GitHub setup: https://docs.github.com/en/authentication/connecting-to-github-with-ssh
+- Re-run `bootstrap.sh` safely — it won't override your SSH key or Git config unless you say so  
+- Use `asdf` to manage runtime versions  
+- Put your playground work in `~/Engineering/playgrounds`  
+- All cloned repos live in `~/Engineering/repos`  
+
+---
+
+## 🧵 References
+
+- [asdf](https://github.com/asdf-vm/asdf)  
+- [GitHub CLI](https://cli.github.com)  
+- [Docpier Bootstrap Repo](https://github.com/Docpier-Labs/dev-bootstrap)  
+- [direnv](https://direnv.net) (for auto-loading env per project)  
+- [SSH GitHub Setup](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
