@@ -58,7 +58,20 @@ cd dev-bootstrap
 # --- Devbox install ---
 if ! command -v devbox >/dev/null 2>&1; then
   echo "📦 Installing Devbox..."
-  brew install jetpack-io/devbox/devbox
+  curl -fsSL https://get.jetpack.io/devbox | bash
+
+  # Add Devbox to PATH
+  export PATH="$HOME/.devbox/bin:$PATH"
+
+  if [[ $SHELL == *"zsh" ]]; then
+    echo 'export PATH="$HOME/.devbox/bin:$PATH"' >> ~/.zshrc
+    source ~/.zshrc
+  elif [[ $SHELL == *"bash" ]]; then
+    echo 'export PATH="$HOME/.devbox/bin:$PATH"' >> ~/.bashrc
+    source ~/.bashrc
+  fi
+
+  echo "✅ Devbox installed and available in PATH."
 fi
 
 echo "🧪 Launching Devbox shell..."
