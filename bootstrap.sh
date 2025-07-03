@@ -104,7 +104,8 @@ fi
 
 # Set environment
 export GHORG_ORG=Docpier-Labs
-export GHORG_CLONE_TYPE=ssh
+export GHORG_CLONE_TYPE=org
+export GHORG_SSH=true
 export GHORG_OUTPUT_DIR=~/Engineering/repos
 export GHORG_SKIP_ARCHIVED=true
 export GHORG_BRANCH=main
