@@ -16,12 +16,13 @@ export default function sync() {
     execSync("brew install ghorg", { stdio: "inherit" });
   }
 
-  process.env.GHORG_CLONE_TYPE = "ssh";
+  process.env.GHORG_ORG = "Docpier-Labs";
+  process.env.GHORG_SSH = "true";
+  process.env.GHORG_CLONE_TYPE = "org";
   process.env.GHORG_OUTPUT_DIR = outputDir;
+  process.env.GHORG_SKIP_ARCHIVED = "true";
+  process.env.GHORG_BRANCH = "main";
+  process.env.GHORG_OVERWRITE = "false";
 
-  if (!existsSync(path.join(outputDir, "dev-bootstrap"))) {
-    execSync(`ghorg clone ${org}`, { stdio: "inherit" });
-  } else {
-    execSync(`ghorg pull ${org}`, { stdio: "inherit" });
-  }
+  execSync(`ghorg clone ${org}`, { stdio: "inherit" });
 }
