@@ -129,23 +129,35 @@ while IFS=$'\t' read -r name sshUrl; do
 done
 
 # --- Build and link dp CLI globally ---
-if [ -f ./dp/index.ts ]; then
+if [ -f ./dp/package.json ]; then
   echo "🛠 Setting up dp CLI..."
 
+  echo "📦 Installing dp CLI dependencies..."
+  cd ./dp
+  if command -v bun >/dev/null 2>&1; then
+    bun install
+  else
+    npm install
+  fi
+  cd ..
+
+  # Ensure tsx is installed globally
   if ! command -v tsx >/dev/null 2>&1; then
     echo "Installing tsx for TypeScript CLI execution..."
     npm install -g tsx
   fi
 
+  # Symlink to /usr/local/bin/dp
   echo '#!/bin/bash' > dp.sh
-  echo 'exec tsx '"$(pwd)/dp/index.ts"' "$@"' >> dp.sh
+  echo 'exec tsx '"$(pwd)/dp/index.ts"' \"$@\"' >> dp.sh
   chmod +x dp.sh
   sudo mv dp.sh /usr/local/bin/dp
 
-  echo "✅ dp CLI is now globally available."
+  echo "✅ dp CLI is now globally available via \`dp\`."
 else
-  echo "⚠️ Could not find dp/index.ts. Skipping dp CLI setup."
+  echo "⚠️ No dp/package.json found. Skipping dp CLI setup."
 fi
+
 
 # --- Run devbox update ---
 echo "🔧 Running devbox update..."
