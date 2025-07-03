@@ -11,6 +11,10 @@ if ! command -v brew >/dev/null 2>&1; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
+# --- Force GitHub to use SSH instead of HTTPS ---
+echo "🔧 Configuring Git to use SSH for GitHub..."
+git config --global url."git@github.com:".insteadOf "https://github.com/"
+
 # --- Install Git if missing ---
 if ! command -v git >/dev/null 2>&1; then
   echo "🐙 Installing Git..."
@@ -42,10 +46,10 @@ else
   echo "✅ SSH key already exists: $SSH_KEY"
 fi
 
-# --- Clone dev-bootstrap ---
+# --- Clone dev-bootstrap from organization ---
 cd ~/Engineering/repos
 if [ ! -d dev-bootstrap ]; then
-  echo "📦 Cloning dev-bootstrap..."
+  echo "📦 Cloning dev-bootstrap from Docpier-Labs..."
   git clone git@github.com:Docpier-Labs/dev-bootstrap.git
 fi
 
