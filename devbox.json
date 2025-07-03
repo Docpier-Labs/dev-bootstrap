@@ -3,7 +3,6 @@
     "pyenv",
     "docker",
     "git",
-    "helm",
     "k6",
     "kubernetes-cli",
     "kubelogin",
