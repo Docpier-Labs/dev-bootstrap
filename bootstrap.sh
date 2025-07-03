@@ -147,15 +147,18 @@ else
   echo "⚠️ Could not find dp/index.ts. Skipping dp CLI setup."
 fi
 
-
-
-# --- Run devbox update and shell ---
+# --- Run devbox update ---
 echo "🔧 Running devbox update..."
-devbox update
+if ! devbox update; then
+  echo "❌ Failed to update devbox environment. Check devbox.json or devbox logs."
+  exit 1
+fi
 
-if [[ -t 1 ]]; then
-  echo "🧪 Entering Devbox shell..."
+# --- Ask user if they want to enter Devbox shell ---
+read -p "🚀 Do you want to enter the Devbox shell now? (y/N): " launch_devbox
+if [[ "$launch_devbox" =~ ^[Yy]$ ]]; then
+  echo "🧪 Launching Devbox shell..."
   devbox shell
 else
-  echo "✅ Devbox environment ready. Run 'devbox shell' to start."
+  echo "✅ Devbox environment ready. You can start it anytime with: devbox shell"
 fi
