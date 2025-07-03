@@ -57,7 +57,7 @@ devbox shell
 
 To set up your full environment:
 ```bash
-curl -sL https://raw.githubusercontent.com/Docpier-Labs/dev-bootstrap/main/bootstrap.sh | bash
+bash <(curl -sL https://raw.githubusercontent.com/Docpier-Labs/dev-bootstrap/main/bootstrap.sh)
 ```
 
 This script will:
