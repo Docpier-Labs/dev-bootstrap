@@ -44,6 +44,8 @@ if [ ! -f "$SSH_KEY" ]; then
   read -p "📎 Press Enter after adding your key to GitHub..."
 else
   echo "✅ SSH key already exists: $SSH_KEY"
+  eval "$(ssh-agent -s)"
+  ssh-add "$SSH_KEY"
 fi
 
 # --- Clone dev-bootstrap from organization ---
@@ -57,10 +59,9 @@ cd dev-bootstrap
 
 # --- Devbox install ---
 if ! command -v devbox >/dev/null 2>&1; then
-  echo "📦 Installing Devbox..."
+  echo "📦 Installing Devbox via official script..."
   curl -fsSL https://get.jetpack.io/devbox | bash
 
-  # Add Devbox to PATH
   export PATH="$HOME/.devbox/bin:$PATH"
 
   if [[ $SHELL == *"zsh" ]]; then
@@ -70,8 +71,12 @@ if ! command -v devbox >/dev/null 2>&1; then
     echo 'export PATH="$HOME/.devbox/bin:$PATH"' >> ~/.bashrc
     source ~/.bashrc
   fi
+fi
 
-  echo "✅ Devbox installed and available in PATH."
+# --- Ensure devbox.json exists ---
+if [ ! -f devbox.json ]; then
+  echo "❌ devbox.json not found in dev-bootstrap. Aborting."
+  exit 1
 fi
 
 echo "🧪 Launching Devbox shell..."
