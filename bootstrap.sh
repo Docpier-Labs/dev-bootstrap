@@ -109,19 +109,32 @@ done
 if [ -f ./dp/index.ts ]; then
   echo "🛠 Setting up dp CLI..."
 
+  # Ensure dependencies are installed
+  if [ -f ./dp/package.json ]; then
+    echo "📦 Installing dp dependencies..."
+    cd dp
+    npm install
+    cd ..
+  else
+    echo "⚠️ dp/package.json not found. Skipping npm install."
+  fi
+
+  # Install tsx globally if not present
   if ! command -v tsx >/dev/null 2>&1; then
-    echo "Installing tsx for TypeScript CLI execution..."
+    echo "📦 Installing tsx globally..."
     npm install -g tsx
   fi
 
+  # Create and install the dp launcher
   echo '#!/bin/bash' > dp.sh
   echo 'exec tsx '"$(pwd)/dp/index.ts"' "$@"' >> dp.sh
   chmod +x dp.sh
   sudo mv dp.sh /usr/local/bin/dp
 
-  echo "✅ dp CLI is now globally available."
+  echo "✅ dp CLI is now globally available. Try: dp --help"
 else
   echo "⚠️ Could not find dp/index.ts. Skipping dp CLI setup."
 fi
+
 
 echo "✅ Bootstrap complete. You're ready to develop."
