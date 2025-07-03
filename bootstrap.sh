@@ -22,11 +22,17 @@ if ! command -v git >/dev/null 2>&1; then
 fi
 
 # --- Git identity setup ---
-read -p "👤 Enter your GitHub username: " github_user
-read -p "📧 Enter your GitHub email: " github_email
+existing_email=$(git config --global user.email || true)
 
-git config --global user.name "$github_user"
-git config --global user.email "$github_email"
+if [[ "$existing_email" == *"@docpier.com" ]]; then
+  echo "✅ Git identity already set to $existing_email"
+else
+  read -p "👤 Enter your GitHub username: " github_user
+  read -p "📧 Enter your GitHub email: " github_email
+
+  git config --global user.name "$github_user"
+  git config --global user.email "$github_email"
+fi
 
 # --- SSH Key setup ---
 SSH_KEY="$HOME/.ssh/id_ed25519"
