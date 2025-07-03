@@ -22,3 +22,6 @@ cask "iterm2"
 cask "warp"
 cask "go2shell"
 cask "apidog"
+brew "kubectl"
+brew "nvm"
+
