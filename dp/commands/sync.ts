@@ -1,28 +1,30 @@
-import { execSync } from "child_process";
-import { existsSync } from "fs";
-import * as os from "os";
-import * as path from "path";
+import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+
+const ORG = 'Docpier-Labs';
+const OUTPUT_DIR = path.resolve(process.env.HOME || '~', 'Engineering', 'repos');
 
 export default function sync() {
-  const outputDir = path.join(os.homedir(), "Engineering", "repos");
-  const org = "Docpier-Labs";
+  console.log(`🔄 Syncing all repos from org '${ORG}' into ${OUTPUT_DIR}`);
 
-  console.log(`🔄 Syncing repos from ${org}...`);
+  const ghListCommand = `gh repo list ${ORG} --limit 1000 --json name,sshUrl --jq '.[] | [.name, .sshUrl] | @tsv'`;
+  const output = execSync(ghListCommand, { encoding: 'utf-8' });
 
-  try {
-    execSync("which ghorg", { stdio: "ignore" });
-  } catch {
-    console.log("📦 Installing ghorg...");
-    execSync("brew install ghorg", { stdio: "inherit" });
+  const lines = output.split('\n').filter(Boolean);
+
+  for (const line of lines) {
+    const [name, sshUrl] = line.split('\t');
+    const repoPath = path.join(OUTPUT_DIR, name);
+
+    if (fs.existsSync(repoPath)) {
+      console.log(`📁 ${name} already exists. Pulling latest changes...`);
+      execSync('git pull', { cwd: repoPath, stdio: 'inherit' });
+    } else {
+      console.log(`📦 Cloning ${name}...`);
+      execSync(`git clone ${sshUrl}`, { cwd: OUTPUT_DIR, stdio: 'inherit' });
+    }
   }
 
-  process.env.GHORG_ORG = "Docpier-Labs";
-  process.env.GHORG_SSH = "true";
-  process.env.GHORG_CLONE_TYPE = "org";
-  process.env.GHORG_OUTPUT_DIR = outputDir;
-  process.env.GHORG_SKIP_ARCHIVED = "true";
-  process.env.GHORG_BRANCH = "main";
-  process.env.GHORG_OVERWRITE = "false";
-
-  execSync(`ghorg clone ${org}`, { stdio: "inherit" });
+  console.log('✅ Repo sync complete.');
 }
