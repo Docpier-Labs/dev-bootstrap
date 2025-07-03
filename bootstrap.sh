@@ -103,8 +103,8 @@ if ! command -v devbox >/dev/null 2>&1; then
 
   if [ -n "$SHELL_RC" ]; then
     echo 'export PATH="$HOME/.devbox/bin:$PATH"' >> "$SHELL_RC"
-    echo "✅ Added Devbox to PATH in $SHELL_RC"
-    echo "ℹ️ Please restart your terminal or run: source $SHELL_RC"
+    source "$SHELL_RC"
+    echo "✅ Added Devbox to PATH and reloaded $SHELL_RC"
   fi
 fi
 
@@ -127,6 +127,27 @@ while IFS=$'\t' read -r name sshUrl; do
     git clone "$sshUrl" "$target"
   fi
 done
+
+# --- Build and link dp CLI globally ---
+if [ -f ./dp/index.ts ]; then
+  echo "🛠 Setting up dp CLI..."
+
+  if ! command -v tsx >/dev/null 2>&1; then
+    echo "Installing tsx for TypeScript CLI execution..."
+    npm install -g tsx
+  fi
+
+  echo '#!/bin/bash' > dp.sh
+  echo 'exec tsx '"$(pwd)/dp/index.ts"' "$@"' >> dp.sh
+  chmod +x dp.sh
+  sudo mv dp.sh /usr/local/bin/dp
+
+  echo "✅ dp CLI is now globally available."
+else
+  echo "⚠️ Could not find dp/index.ts. Skipping dp CLI setup."
+fi
+
+
 
 # --- Run devbox update and shell ---
 echo "🔧 Running devbox update..."
