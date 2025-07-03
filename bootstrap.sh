@@ -110,8 +110,10 @@ if [ ! -d "$HOME/.sdkman" ]; then
   echo "📦 Installing SDKMAN..."
   curl -s "https://get.sdkman.io" | bash
 fi
-export ZSH_VERSION="dummy"
-source "$HOME/.sdkman/bin/sdkman-init.sh"
+if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
+  : "${ZSH_VERSION:=}"  # Avoid unbound variable
+  source "$HOME/.sdkman/bin/sdkman-init.sh"
+fi
 sdk install java 21-tem || true
 
 # --- Setup pyenv ---
