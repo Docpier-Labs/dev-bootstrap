@@ -1,7 +1,6 @@
 {
   "packages": [
     "pyenv",
-    "nvm",
     "docker",
     "git",
     "helm",
