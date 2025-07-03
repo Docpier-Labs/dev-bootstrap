@@ -110,14 +110,8 @@ export GHORG_SKIP_ARCHIVED=true
 export GHORG_BRANCH=main
 export GHORG_OVERWRITE=false
 
-# Only clone if not already cloned
-if [ ! -d "$GHORG_OUTPUT_DIR/dev-bootstrap" ]; then
-  echo "🔄 Initial ghorg clone of $GHORG_ORG..."
-  ghorg clone $GHORG_ORG
-else
-  echo "🔄 Pulling latest updates for all $GHORG_ORG repos..."
-  ghorg pull $GHORG_ORG
-fi
+echo "🔄 Initial ghorg clone of $GHORG_ORG..."
+ghorg clone $GHORG_ORG
 
 echo "🧪 Launching Devbox shell..."
 devbox shell
