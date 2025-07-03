@@ -110,6 +110,7 @@ if [ ! -d "$HOME/.sdkman" ]; then
   echo "📦 Installing SDKMAN..."
   curl -s "https://get.sdkman.io" | bash
 fi
+export ZSH_VERSION="fake"
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk install java 21-tem || true
 
