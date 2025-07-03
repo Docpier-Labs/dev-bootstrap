@@ -1,3 +1,14 @@
+# Taps
+tap "homebrew/cask"
+tap "homebrew/cask-versions"
+tap "homebrew/core"
+
+# CLI Tools
+brew "kubectl"
+brew "nvm"
+brew "gh"
+
+# GUI Applications (Casks)
 cask "cursor"
 cask "visual-studio-code"
 cask "intellij-idea"
@@ -22,6 +33,3 @@ cask "iterm2"
 cask "warp"
 cask "go2shell"
 cask "apidog"
-brew "kubectl"
-brew "nvm"
-
