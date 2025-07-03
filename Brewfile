@@ -1,8 +1,3 @@
-# Taps
-tap "homebrew/cask"
-tap "homebrew/cask-versions"
-tap "homebrew/core"
-
 # CLI Tools
 brew "kubectl"
 brew "nvm"
