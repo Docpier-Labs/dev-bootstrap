@@ -105,6 +105,23 @@ while IFS=$'\t' read -r name sshUrl; do
   fi
 done
 
+# --- Setup SDKMAN ---
+if [ ! -d "$HOME/.sdkman" ]; then
+  echo "📦 Installing SDKMAN..."
+  curl -s "https://get.sdkman.io" | bash
+fi
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk install java 21-tem || true
+
+# --- Setup pyenv ---
+pyenv install -s 3.11.9
+pyenv global 3.11.9
+
+# --- Setup NVM ---
+nvm install 22.17.0
+nvm use 22.17.0
+
+
 # --- Setup dp CLI ---
 if [ -f ./dp/index.ts ]; then
   echo "🛠 Setting up dp CLI..."
