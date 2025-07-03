@@ -83,38 +83,15 @@ echo "📦 Cloning dev-bootstrap from Docpier-Labs..."
 git clone git@github.com:Docpier-Labs/dev-bootstrap.git
 cd dev-bootstrap
 
-# --- Install GUI apps if Brewfile exists ---
+# --- Install GUI + CLI apps via Brewfile ---
 if [ -f Brewfile ]; then
-  echo "🛠 Installing GUI apps from Brewfile..."
+  echo "🛠 Installing all apps from Brewfile..."
   brew bundle --file=Brewfile
 else
-  echo "⚠ Brewfile not found. Skipping GUI app installation."
+  echo "⚠ Brewfile not found. Skipping installation."
 fi
 
-# --- Install Devbox ---
-if ! command -v devbox >/dev/null 2>&1; then
-  echo "📦 Installing Devbox..."
-  curl -fsSL https://get.jetpack.io/devbox | bash
-  export PATH="$HOME/.devbox/bin:$PATH"
-
-  SHELL_RC=""
-  [[ $SHELL == *"zsh" ]] && SHELL_RC="$HOME/.zshrc"
-  [[ $SHELL == *"bash" ]] && SHELL_RC="$HOME/.bashrc"
-
-  if [ -n "$SHELL_RC" ]; then
-    echo 'export PATH="$HOME/.devbox/bin:$PATH"' >> "$SHELL_RC"
-    source "$SHELL_RC"
-    echo "✅ Added Devbox to PATH and reloaded $SHELL_RC"
-  fi
-fi
-
-# --- Ensure devbox.json exists ---
-if [ ! -f devbox.json ]; then
-  echo "❌ devbox.json not found. Aborting."
-  exit 1
-fi
-
-# --- Sync All Repos from Docpier-Labs via GitHub CLI ---
+# --- Sync all repos from GitHub org via gh CLI ---
 echo "🔄 Syncing all repos from Docpier-Labs..."
 gh repo list Docpier-Labs --limit 1000 --json name,sshUrl --jq '.[] | [.name, .sshUrl] | @tsv' |
 while IFS=$'\t' read -r name sshUrl; do
@@ -128,49 +105,23 @@ while IFS=$'\t' read -r name sshUrl; do
   fi
 done
 
-# --- Build and link dp CLI globally ---
-if [ -f ./dp/package.json ]; then
+# --- Setup dp CLI ---
+if [ -f ./dp/index.ts ]; then
   echo "🛠 Setting up dp CLI..."
 
-  echo "📦 Installing dp CLI dependencies..."
-  cd ./dp
-  if command -v bun >/dev/null 2>&1; then
-    bun install
-  else
-    npm install
-  fi
-  cd ..
-
-  # Ensure tsx is installed globally
   if ! command -v tsx >/dev/null 2>&1; then
     echo "Installing tsx for TypeScript CLI execution..."
     npm install -g tsx
   fi
 
-  # Symlink to /usr/local/bin/dp
   echo '#!/bin/bash' > dp.sh
-  echo 'exec tsx '"$(pwd)/dp/index.ts"' \"$@\"' >> dp.sh
+  echo 'exec tsx '"$(pwd)/dp/index.ts"' "$@"' >> dp.sh
   chmod +x dp.sh
   sudo mv dp.sh /usr/local/bin/dp
 
-  echo "✅ dp CLI is now globally available via \`dp\`."
+  echo "✅ dp CLI is now globally available."
 else
-  echo "⚠️ No dp/package.json found. Skipping dp CLI setup."
+  echo "⚠️ Could not find dp/index.ts. Skipping dp CLI setup."
 fi
 
-
-# --- Run devbox update ---
-echo "🔧 Running devbox update..."
-if ! devbox update; then
-  echo "❌ Failed to update devbox environment. Check devbox.json or devbox logs."
-  exit 1
-fi
-
-# --- Ask user if they want to enter Devbox shell ---
-read -p "🚀 Do you want to enter the Devbox shell now? (y/N): " launch_devbox
-if [[ "$launch_devbox" =~ ^[Yy]$ ]]; then
-  echo "🧪 Launching Devbox shell..."
-  devbox shell
-else
-  echo "✅ Devbox environment ready. You can start it anytime with: devbox shell"
-fi
+echo "✅ Bootstrap complete. You're ready to develop."
