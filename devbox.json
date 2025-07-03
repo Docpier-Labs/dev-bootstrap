@@ -1,6 +1,5 @@
 {
   "packages": [
-    "sdkman",
     "pyenv",
     "nvm",
     "docker",
@@ -29,8 +28,6 @@
     "watch",
     "bat",
     "kustomize",
-    "tesseract",
-    "poppler",
     "ghorg",
     "bash-completion",
     "zsh-completions",
