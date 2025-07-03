@@ -77,6 +77,26 @@ else
   echo "Brewfile not found, skipping GUI apps installation."
 fi
 
+# ─── Ensure GitHub CLI Auth Exists ────────────────────────────────────────
+if ! gh auth status &>/dev/null; then
+  echo "GitHub CLI not authenticated. Running 'gh auth login'..."
+  gh auth login
+fi
+
+# ─── Sync All Repos via gh ───────────────────────────────────────────────
+echo "Syncing all repos from Docpier-Labs (SSH)..."
+
+gh repo list Docpier-Labs --limit 1000 --json name,sshUrl --jq '.[] | [.name, .sshUrl] | @tsv' |
+while IFS=$'\t' read -r name sshUrl; do
+  if [ -d "$HOME/Engineering/repos/$name" ]; then
+    echo "$name exists. Pulling latest changes..."
+    git -C "$HOME/Engineering/repos/$name" pull
+  else
+    echo "Cloning $name..."
+    git clone "$sshUrl" "$HOME/Engineering/repos/$name"
+  fi
+done
+
 # --- Devbox install ---
 if ! command -v devbox >/dev/null 2>&1; then
   echo "Installing Devbox via official script..."
@@ -98,26 +118,6 @@ if [ ! -f devbox.json ]; then
   echo "devbox.json not found in dev-bootstrap. Aborting."
   exit 1
 fi
-
-# ─── Ensure GitHub CLI Auth Exists ────────────────────────────────────────
-if ! gh auth status &>/dev/null; then
-  echo "GitHub CLI not authenticated. Running 'gh auth login'..."
-  gh auth login
-fi
-
-# ─── Sync All Repos via gh ───────────────────────────────────────────────
-echo "Syncing all repos from Docpier-Labs (SSH)..."
-
-gh repo list Docpier-Labs --limit 1000 --json name,sshUrl --jq '.[] | [.name, .sshUrl] | @tsv' |
-while IFS=$'\t' read -r name sshUrl; do
-  if [ -d "$HOME/Engineering/repos/$name" ]; then
-    echo "$name exists. Pulling latest changes..."
-    git -C "$HOME/Engineering/repos/$name" pull
-  else
-    echo "Cloning $name..."
-    git clone "$sshUrl" "$HOME/Engineering/repos/$name"
-  fi
-done
 
 echo "Launching Devbox shell..."
 devbox shell
