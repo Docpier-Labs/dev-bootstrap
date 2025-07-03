@@ -1,5 +1,8 @@
 {
   "packages": [
+    "sdkman",
+    "pyenv",
+    "nvm",
     "docker",
     "git",
     "helm",
@@ -13,10 +16,6 @@
     "tmux",
     "htop",
     "tree-sitter",
-    "nvm",
-    "nodejs",
-    "openjdk",
-    "python3",
     "imagemagick",
     "vips",
     "ffmpeg",
@@ -25,9 +24,39 @@
     "zbar",
     "ripgrep",
     "fzf",
-    "httpie"
+    "httpie",
+    "yq",
+    "watch",
+    "bat",
+    "kustomize",
+    "tesseract",
+    "poppler",
+    "ghorg",
+    "bash-completion",
+    "zsh-completions",
+    "zsh-autosuggestions",
+    "zsh-syntax-highlighting"
   ],
   "tasks": {
     "update": "./repos/dev-bootstrap/bootstrap/update.sh"
+  },
+  "shell": {
+    "init": [
+      "source \"$HOME/.sdkman/bin/sdkman-init.sh\"",
+      "sdk install java 21-tem || true",
+      "sdk install gradle || true",
+      "sdk install maven || true",
+
+      "export PYENV_ROOT=\"$HOME/.pyenv\"",
+      "eval \"$(pyenv init --path)\"",
+      "eval \"$(pyenv init -)\"",
+      "pyenv install -s 3.11.9",
+      "pyenv global 3.11.9",
+
+      "export NVM_DIR=\"$HOME/.nvm\"",
+      "source \"$NVM_DIR/nvm.sh\"",
+      "nvm install 22.17.0 || true",
+      "nvm use 22.17.0"
+    ]
   }
 }
