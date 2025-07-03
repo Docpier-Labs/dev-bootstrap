@@ -50,10 +50,21 @@ fi
 
 # --- Clone dev-bootstrap from organization ---
 cd ~/Engineering/repos
-if [ ! -d dev-bootstrap ]; then
-  echo "📦 Cloning dev-bootstrap from Docpier-Labs..."
-  git clone git@github.com:Docpier-Labs/dev-bootstrap.git
+
+if [ -d dev-bootstrap ]; then
+  echo "⚠️  Folder 'dev-bootstrap' already exists."
+  read -p "❓ Do you want to delete and re-clone it? (y/N): " confirm
+  if [[ "$confirm" =~ ^[Yy]$ ]]; then
+    echo "🧹 Removing existing 'dev-bootstrap'..."
+    rm -rf dev-bootstrap
+  else
+    echo "🚫 Aborting bootstrap to avoid overwrite."
+    exit 1
+  fi
 fi
+
+echo "📦 Cloning dev-bootstrap from Docpier-Labs..."
+git clone git@github.com:Docpier-Labs/dev-bootstrap.git
 
 cd dev-bootstrap
 
