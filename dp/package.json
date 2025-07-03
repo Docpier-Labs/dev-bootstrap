@@ -1,0 +1,12 @@
+{
+  "name": "dp-cli",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.ts",
+  "bin": {
+    "dp": "index.ts"
+  },
+  "dependencies": {
+    "commander": "^11.0.0"
+  }
+}
