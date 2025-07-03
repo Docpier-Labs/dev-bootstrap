@@ -10,17 +10,8 @@ if ! command -v brew >/dev/null 2>&1; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-# --- Install Git if missing ---
-if ! command -v git >/dev/null 2>&1; then
-  echo "🔧 Installing Git..."
-  brew install git
-fi
-
-# --- Install GitHub CLI if missing ---
-if ! command -v gh >/dev/null 2>&1; then
-  echo "🔧 Installing GitHub CLI..."
-  brew install gh
-fi
+# --- Install Base Tools ---
+brew install git gh asdf
 
 # --- Configure Git to use SSH ---
 echo "🔐 Configuring Git to use SSH for GitHub..."
@@ -105,22 +96,8 @@ while IFS=$'\t' read -r name sshUrl; do
   fi
 done
 
-# --- Setup SDKMAN ---
-if [ ! -d "$HOME/.sdkman" ]; then
-  echo "📦 Installing SDKMAN..."
-  curl -s "https://get.sdkman.io" | bash
-fi
-source "$HOME/.sdkman/bin/sdkman-init.sh"
-sdk install java 21-tem || true
-
-# --- Setup pyenv ---
-pyenv install -s 3.11.9
-pyenv global 3.11.9
-
-# --- Setup NVM ---
-nvm install 22.17.0
-nvm use 22.17.0
-
+echo "📐 Installing language runtimes with asdf..."
+asdf install
 
 # --- Setup dp CLI ---
 if [ -f ./dp/index.ts ]; then
