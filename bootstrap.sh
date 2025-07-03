@@ -98,7 +98,7 @@ fi
 
 # --- Install ghorg and sync repos ---
 if ! command -v ghorg >/dev/null 2>&1; then
-  echo "📦 Installing ghorg..."
+  echo "Installing ghorg..."
   brew install ghorg
 fi
 
@@ -111,8 +111,8 @@ export GHORG_SKIP_ARCHIVED=true
 export GHORG_BRANCH=main
 export GHORG_OVERWRITE=false
 
-echo "🔄 Initial ghorg clone of $GHORG_ORG..."
+echo "Initial ghorg clone of $GHORG_ORG..."
 ghorg clone $GHORG_ORG
 
-echo "🧪 Launching Devbox shell..."
+echo "Launching Devbox shell..."
 devbox shell
