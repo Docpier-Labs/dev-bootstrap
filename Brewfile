@@ -23,6 +23,7 @@ brew "fzf"
 brew "httpie"
 brew "kubectl"
 brew "gh"
+brew "huggingface-cli"
 
 cask "cursor"
 cask "visual-studio-code"
